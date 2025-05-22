@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Internship = require('../models/Internship');
 const auth = require('../middleware/auth');
 
@@ -29,10 +30,31 @@ router.get('/my-internships', auth, async (req, res) => {
   }
 });
 
+// Get internship statistics
+router.get('/stats', auth, async (req, res) => {
+  try {
+    const totalInternships = await Internship.countDocuments({ postedBy: req.user.userId });
+    const activeInternships = await Internship.countDocuments({ 
+      postedBy: req.user.userId,
+      status: 'active'
+    });
+    res.json({ totalInternships, activeInternships });
+  } catch (error) {
+    console.error('Error fetching internship stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Get a single internship
 router.get('/:id', async (req, res) => {
   try {
-    const internship = await Internship.findById(req.params.id);
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid internship ID' });
+    }
+
+    const internship = await Internship.findById(req.params.id)
+      .populate('postedBy', 'name company');
+      
     if (!internship) {
       return res.status(404).json({ message: 'Internship not found' });
     }
@@ -80,6 +102,10 @@ router.post('/', auth, async (req, res) => {
 // Update an internship
 router.put('/:id', auth, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid internship ID' });
+    }
+
     const internship = await Internship.findById(req.params.id);
     if (!internship) {
       return res.status(404).json({ message: 'Internship not found' });
@@ -105,6 +131,10 @@ router.put('/:id', auth, async (req, res) => {
 // Delete an internship
 router.delete('/:id', auth, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid internship ID' });
+    }
+
     const internship = await Internship.findById(req.params.id);
     if (!internship) {
       return res.status(404).json({ message: 'Internship not found' });
