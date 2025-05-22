@@ -52,7 +52,7 @@ cd ..
 
 3. Create a `.env` file in the root directory with the following variables:
 ```
-MONGODB_URI=mongodb://localhost:27017/huntern
+MONGODB_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret_here
 PORT=5000
 ```
@@ -129,7 +129,3 @@ huntern/
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details. 
