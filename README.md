@@ -35,7 +35,7 @@ Huntern is a full-stack web application that connects students with employers fo
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/huntern.git
+git clone https://github.com/adarshshiv/Huntern.git
 cd huntern
 ```
 
