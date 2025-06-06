@@ -27,8 +27,12 @@ router.post('/register', async (req, res) => {
     });
 
     // Hash password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    user = new User({
+      name,
+      email,
+      password, // Plain password — will be hashed in pre-save hook
+      role: role || 'student'
+    });
 
     await user.save();
 
