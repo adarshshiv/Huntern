@@ -27,8 +27,12 @@ router.post('/register', async (req, res) => {
     });
 
     // Hash password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    user = new User({
+      name,
+      email,
+      password, // Plain password — will be hashed in pre-save hook
+      role: role || 'student'
+    });
 
     await user.save();
 
@@ -123,10 +127,13 @@ router.post('/login', async (req, res) => {
 // @access  Private
 router.get('/user', auth, async (req, res) => {
   try {
+    console.log('Getting user data for userId:', req.user.userId);
     const user = await User.findById(req.user.userId).select('-password');
     if (!user) {
+      console.log('User not found with ID:', req.user.userId);
       return res.status(404).json({ message: 'User not found' });
     }
+    console.log('User data retrieved successfully:', { id: user._id, email: user.email, role: user.role });
     res.json(user);
   } catch (err) {
     console.error('Error in get user:', err);

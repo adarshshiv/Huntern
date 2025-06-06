@@ -4,6 +4,8 @@ const auth = require('../middleware/auth');
 const Internship = require('../models/Internship');
 const mongoose = require('mongoose');
 
+
+
 // @route   GET api/internships
 // @desc    Get all internships
 // @access  Public

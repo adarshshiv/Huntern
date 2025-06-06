@@ -14,9 +14,9 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.use('/api/auth', require('../routes/auth'));
-app.use('/api/internships', require('../routes/internships'));
-app.use('/api/applications', require('../routes/applications'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/internships', require('./routes/internships'));
+app.use('/api/applications', require('./routes/applications'));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
